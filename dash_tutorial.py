@@ -5,7 +5,6 @@ from dash.dependencies import Input, Output
 import plotly.express as px
 import pandas as pd
 
-
 external_stylesheets = ['https://codepen.io/chriddyp/pen/bWLwgP.css']
 
 app = dash.Dash(__name__, external_stylesheets=external_stylesheets)
@@ -18,52 +17,54 @@ df = pd.read_csv('data.csv', index_col=0)
 print(df.head())
 print(list(df.columns))
 
-
-# fig = px.line(df, x=df.index, y='2015')
+# 3. b) The plotly express line graph built using data
+# static_fig = px.line(df, x=df.index, y='2015')
 
 app.layout = html.Div(children=[
     html.H1(children='Dash Demo'),
 
-    html.Div(children='''
-        Building a simple Dash app
-    '''),
+    # 1. Simplest Dash App
+    html.Div(children="Building a simple Dash app. Hello World of Dash Apps! "
+                      "Have a look at the code of this app and unblock more features by uncommenting code blocks!"),
 
-    html.Label('Year'),
-    dcc.Dropdown(
-        id='measurement_types-dropdown',
-        options=[{'label': str(y), 'value': y} for y in df.columns],
-        value=2015,
-    ),
+    # 2. Adding a Dash Component to our App
+    # html.Label('Year'),
+    # dcc.Dropdown(
+    #     id='measurement_types-dropdown',
+    #     options=[{'label': str(y), 'value': y} for y in df.columns],
+    #     value=2015,
+    # ),
 
-    html.Label('Plotly Graph'),
-    dcc.Loading(id="loading-1", children=[html.Div(id="loading-output-1")], type="default"),
-    dcc.Graph(
-        id='line_graph'
-    )
+    # 3. a) Adding a static graph
+    # dcc.Graph(id='line_graph-1', figure=static_fig),
+
+    # Recomment Part 3
+    # 4. a) Adding a graph dependent of a dash callback
+    # html.Label('Plotly Graph'),
+    # dcc.Graph(id='line_graph'),
+
+    # Recomment Part 4.a)
+    # 5. Adding a loading icon to graph while it loads
+    # dcc.Loading(children=[dcc.Graph(id='line_graph')]),
+
 ])
 
 
-@app.callback(
-    Output('loading-1', 'figure'),
-    [Input('line-graph', 'loading-state')])
-def update_figure(loading_state):
-    return loading_state['is_loading']
-
-
-@app.callback(
-    Output('line_graph', 'figure'),
-    [Input('measurement_types-dropdown', 'value')])
-def update_figure(year):
-    fig1 = px.line(df,
-                   x=df.index,
-                   y=df[str(year)],
-                   title='Number of Hospitalized Patients in Switzerland '
-                         'divided by Age Group in the year {}'.format(year),
-                   labels={
-                       "age_group": "Age Group",
-                       str(year): "Number of Patients"
-                   })
-    return fig1
+# 4. b) The corresponding callback function that makes use of python function decorators
+# @app.callback(
+#     Output('line_graph', 'figure'),
+#     [Input('measurement_types-dropdown', 'value')])
+# def update_figure(year):
+#     fig1 = px.line(df,
+#                    x=df.index,
+#                    y=df[str(year)],
+#                    title='Number of Hospitalized Patients in Switzerland '
+#                          'divided by Age Group in the year {}'.format(year),
+#                    labels={
+#                        "age_group": "Age Group",
+#                        str(year): "Number of Patients"
+#                    })
+#     return fig1
 
 
 if __name__ == '__main__':
