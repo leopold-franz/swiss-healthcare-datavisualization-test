@@ -35,11 +35,19 @@ app.layout = html.Div(children=[
         value=2015,
     ),
 
-    html.Label(''),
+    html.Label('Plotly Graph'),
+    dcc.Loading(id="loading-1", children=[html.Div(id="loading-output-1")], type="default"),
     dcc.Graph(
         id='line_graph'
     )
 ])
+
+
+@app.callback(
+    Output('loading-1', 'figure'),
+    [Input('line-graph', 'loading-state')])
+def update_figure(loading_state):
+    return loading_state['is_loading']
 
 
 @app.callback(
