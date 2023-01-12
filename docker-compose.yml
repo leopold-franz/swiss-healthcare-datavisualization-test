@@ -1,0 +1,9 @@
+services:
+  app:
+    build: .
+    container_name: swiss-healthcare-dash-server
+    command: python src/dash_tutorial.py
+    ports:
+      - 80:80
+    volumes:
+      - .:/code
